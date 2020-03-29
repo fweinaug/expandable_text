@@ -1,0 +1,11 @@
+name: expandable_text
+description: A new Flutter package project.
+version: 0.1.0
+repository: https://github.com/fweinaug/expandable_text
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
