@@ -76,7 +76,7 @@ class ExpandableTextState extends State<ExpandableText> {
     final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
     final locale = Localizations.localeOf(context, nullOk: true);
 
-    final linkText = _expanded ? ' ${widget.collapseText}' : '\u2026 ${widget.expandText}';
+    final linkText = _expanded ? ' ${widget.collapseText}' : ' ${widget.expandText}';
     final linkColor = widget.linkColor ?? Theme.of(context).accentColor;
 
     final link = TextSpan(
@@ -85,6 +85,11 @@ class ExpandableTextState extends State<ExpandableText> {
         color: linkColor,
       ),
       recognizer: _tapGestureRecognizer,
+    );
+
+    final ellipsis = TextSpan(
+      text: '\u2026',
+      style: effectiveTextStyle,
     );
 
     final text = TextSpan(
@@ -108,12 +113,16 @@ class ExpandableTextState extends State<ExpandableText> {
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final linkSize = textPainter.size;
 
+        textPainter.text = ellipsis;
+        textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
+        final ellipsisSize = textPainter.size;
+
         textPainter.text = text;
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final textSize = textPainter.size;
 
         final position = textPainter.getPositionForOffset(Offset(
-          textSize.width - linkSize.width,
+          textSize.width - ellipsisSize.width - linkSize.width,
           textSize.height,
         ));
         final endOffset = textPainter.getOffsetBefore(position.offset);
@@ -124,7 +133,7 @@ class ExpandableTextState extends State<ExpandableText> {
             style: effectiveTextStyle,
             text: _expanded
                 ? widget.text
-                : widget.text.substring(0, endOffset),
+                : widget.text.substring(0, endOffset) + '\u2026',
             children: <TextSpan>[
               link,
             ],
