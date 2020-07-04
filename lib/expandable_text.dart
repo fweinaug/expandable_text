@@ -17,6 +17,7 @@ class ExpandableText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines = 2,
     this.semanticsLabel,
+    this.ellipsisInsideLink = true,
   }) : assert(text != null),
        assert(expandText != null),
        assert(collapseText != null),
@@ -35,6 +36,7 @@ class ExpandableText extends StatefulWidget {
   final double textScaleFactor;
   final int maxLines;
   final String semanticsLabel;
+  final bool ellipsisInsideLink;
 
   @override
   ExpandableTextState createState() => ExpandableTextState();
@@ -63,6 +65,8 @@ class ExpandableTextState extends State<ExpandableText> {
     setState(() => _expanded = !_expanded);
   }
 
+  String ellipsisText(bool insideLink) => insideLink ? '\u2026' : '';
+
   @override
   Widget build(BuildContext context) {
     final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
@@ -75,8 +79,9 @@ class ExpandableTextState extends State<ExpandableText> {
     final textDirection = widget.textDirection ?? Directionality.of(context);
     final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
     final locale = Localizations.localeOf(context, nullOk: true);
+    final ellipsisInsideLink = widget.ellipsisInsideLink;
 
-    final linkText = _expanded ? ' ${widget.collapseText}' : ' ${widget.expandText}';
+    final linkText = _expanded ? ' ${widget.collapseText}' : ellipsisText(ellipsisInsideLink) + ' ${widget.expandText}';
     final linkColor = widget.linkColor ?? Theme.of(context).accentColor;
 
     final link = TextSpan(
@@ -88,7 +93,7 @@ class ExpandableTextState extends State<ExpandableText> {
     );
 
     final ellipsis = TextSpan(
-      text: '\u2026',
+      text: ellipsisText(!ellipsisInsideLink),
       style: effectiveTextStyle,
     );
 
@@ -133,7 +138,7 @@ class ExpandableTextState extends State<ExpandableText> {
             style: effectiveTextStyle,
             text: _expanded
                 ? widget.text
-                : widget.text.substring(0, endOffset) + '\u2026',
+                : widget.text.substring(0, endOffset) + ellipsisText(!ellipsisInsideLink),
             children: <TextSpan>[
               link,
             ],
