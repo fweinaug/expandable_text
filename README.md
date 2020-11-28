@@ -1,6 +1,7 @@
 # expandable_text
 
 [![pub package](https://img.shields.io/pub/v/expandable_text.svg)](https://pub.dev/packages/expandable_text)
+[![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/fweinaug/expandable_text/blob/master/LICENSE)
 
 This Flutter package includes the widget `ExpandableText` which you can use to initially only show a
 defined number of lines of a probably long text. The widget appends a configurable text link which
@@ -14,7 +15,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  expandable_text: 0.1.0
+  expandable_text: 1.0.0
 ```
 
 Next, import the package into your dart code:
@@ -38,3 +39,13 @@ Widget build(BuildContext context) {
     );
 }
 ```
+
+## Bugs and feature requests
+
+Have a bug or a feature request? Please first search for existing and closed issues.
+If your problem or idea is not addressed yet, [please open a new issue](https://github.com/fweinaug/expandable_text/issues/new).
+
+## Copyright & License
+
+Code copyright 2020 Florian Weinaug.
+Code released under the [MIT license](https://github.com/fweinaug/expandable_text/blob/master/LICENSE).

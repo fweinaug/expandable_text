@@ -1,6 +1,6 @@
 name: expandable_text
 description: Widget that only shows the first lines of a text and adds a link to expand the full text.
-version: 0.1.0
+version: 1.0.0
 homepage: https://github.com/fweinaug/expandable_text
 repository: https://github.com/fweinaug/expandable_text
 
