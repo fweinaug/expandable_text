@@ -11,6 +11,7 @@ class ExpandableText extends StatefulWidget {
     @required this.collapseText,
     this.expanded = false,
     this.linkColor,
+    this.linkEllipsis = true,
     this.style,
     this.textDirection,
     this.textAlign,
@@ -21,6 +22,7 @@ class ExpandableText extends StatefulWidget {
        assert(expandText != null),
        assert(collapseText != null),
        assert(expanded != null),
+       assert(linkEllipsis != null),
        assert(maxLines != null && maxLines > 0),
        super(key: key);
 
@@ -29,6 +31,7 @@ class ExpandableText extends StatefulWidget {
   final String collapseText;
   final bool expanded;
   final Color linkColor;
+  final bool linkEllipsis;
   final TextStyle style;
   final TextDirection textDirection;
   final TextAlign textAlign;
@@ -76,15 +79,23 @@ class ExpandableTextState extends State<ExpandableText> {
     final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
     final locale = Localizations.localeOf(context, nullOk: true);
 
-    final linkText = _expanded ? ' ${widget.collapseText}' : '\u2026 ${widget.expandText}';
+    final linkText = _expanded ? ' ${widget.collapseText}' : widget.expandText;
     final linkColor = widget.linkColor ?? Theme.of(context).accentColor;
+    final linkTextStyle = effectiveTextStyle.copyWith(color: linkColor);
 
     final link = TextSpan(
-      text: linkText,
-      style: effectiveTextStyle.copyWith(
-        color: linkColor,
-      ),
-      recognizer: _tapGestureRecognizer,
+      children: [
+        if (!_expanded) TextSpan(
+          text: '\u2026',
+          style: widget.linkEllipsis ? linkTextStyle : effectiveTextStyle,
+          recognizer: widget.linkEllipsis ? _tapGestureRecognizer : null,
+        ),
+        TextSpan(
+          text: linkText,
+          style: linkTextStyle,
+          recognizer: _tapGestureRecognizer,
+        ),
+      ],
     );
 
     final text = TextSpan(
@@ -112,14 +123,14 @@ class ExpandableTextState extends State<ExpandableText> {
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final textSize = textPainter.size;
 
-        final position = textPainter.getPositionForOffset(Offset(
-          textSize.width - linkSize.width,
-          textSize.height,
-        ));
-        final endOffset = textPainter.getOffsetBefore(position.offset);
-
         TextSpan textSpan;
         if (textPainter.didExceedMaxLines) {
+          final position = textPainter.getPositionForOffset(Offset(
+            textSize.width - linkSize.width,
+            textSize.height,
+          ));
+          final endOffset = textPainter.getOffsetBefore(position.offset);
+
           textSpan = TextSpan(
             style: effectiveTextStyle,
             text: _expanded
