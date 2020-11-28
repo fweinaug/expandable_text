@@ -86,7 +86,7 @@ class ExpandableTextState extends State<ExpandableText> {
     final link = TextSpan(
       children: [
         if (!_expanded) TextSpan(
-          text: '\u2026',
+          text: '\u2026 ',
           style: widget.linkEllipsis ? linkTextStyle : effectiveTextStyle,
           recognizer: widget.linkEllipsis ? _tapGestureRecognizer : null,
         ),
