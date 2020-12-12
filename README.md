@@ -1,5 +1,6 @@
 # expandable_text
 
+![Build](https://github.com/fweinaug/expandable_text/workflows/Build/badge.svg)
 [![pub package](https://img.shields.io/pub/v/expandable_text.svg)](https://pub.dev/packages/expandable_text)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/fweinaug/expandable_text/blob/master/LICENSE)
 
