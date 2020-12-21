@@ -2,6 +2,9 @@ library expandable_text;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:knock_knock/core/notifiers/HomeFeedNotifier.dart';
+import 'package:knock_knock/screens/posts_screens/trending.dart';
+import 'package:provider/provider.dart';
 
 class ExpandableText extends StatefulWidget {
   const ExpandableText(
@@ -18,6 +21,7 @@ class ExpandableText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines = 2,
     this.semanticsLabel,
+    this.onExpandedChange,
   }) : assert(text != null),
        assert(expandText != null),
        assert(collapseText != null),
@@ -38,6 +42,9 @@ class ExpandableText extends StatefulWidget {
   final double textScaleFactor;
   final int maxLines;
   final String semanticsLabel;
+
+
+  final ValueChanged<bool> onExpandedChange;
 
   @override
   ExpandableTextState createState() => ExpandableTextState();
@@ -63,7 +70,11 @@ class ExpandableTextState extends State<ExpandableText> {
   }
 
   void _toggleExpanded() {
-    setState(() => _expanded = !_expanded);
+    setState(() {
+      _expanded = !_expanded;
+    });
+    // Provider.of<HomeFeedNotifier>(context, listen: false).togleExpanded(_expanded);
+    widget.onExpandedChange(_expanded);
   }
 
   @override
@@ -168,3 +179,4 @@ class ExpandableTextState extends State<ExpandableText> {
     return result;
   }
 }
+
