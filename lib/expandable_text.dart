@@ -10,6 +10,7 @@ class ExpandableText extends StatefulWidget {
     @required this.expandText,
     @required this.collapseText,
     this.expanded = false,
+    this.onExpandedChanged,
     this.linkColor,
     this.linkEllipsis = true,
     this.style,
@@ -30,6 +31,7 @@ class ExpandableText extends StatefulWidget {
   final String expandText;
   final String collapseText;
   final bool expanded;
+  final ValueChanged<bool> onExpandedChanged;
   final Color linkColor;
   final bool linkEllipsis;
   final TextStyle style;
@@ -63,7 +65,11 @@ class ExpandableTextState extends State<ExpandableText> {
   }
 
   void _toggleExpanded() {
-    setState(() => _expanded = !_expanded);
+    final toggledExpanded = !_expanded;
+
+    setState(() => _expanded = toggledExpanded);
+
+    widget.onExpandedChanged?.call(toggledExpanded);
   }
 
   @override
@@ -73,11 +79,6 @@ class ExpandableTextState extends State<ExpandableText> {
     if (widget.style == null || widget.style.inherit) {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
     }
-
-    final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
-    final textDirection = widget.textDirection ?? Directionality.of(context);
-    final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
-    final locale = Localizations.localeOf(context, nullOk: true);
 
     final linkText = _expanded ? ' ${widget.collapseText}' : widget.expandText;
     final linkColor = widget.linkColor ?? Theme.of(context).accentColor;
@@ -107,6 +108,11 @@ class ExpandableTextState extends State<ExpandableText> {
       builder: (BuildContext context, BoxConstraints constraints) {
         assert(constraints.hasBoundedWidth);
         final double maxWidth = constraints.maxWidth;
+
+        final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
+        final textDirection = widget.textDirection ?? Directionality.of(context);
+        final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
+        final locale = Localizations.localeOf(context, nullOk: true);
 
         TextPainter textPainter = TextPainter(
           text: link,
