@@ -25,7 +25,7 @@ Next, import the package into your dart code:
 import 'package:expandable_text/expandable_text.dart';
 ```
 
-## Usage
+### Usage
 
 Example which shows an expandable text if `longText` exceeds one line:
 
@@ -48,5 +48,5 @@ If your problem or idea is not addressed yet, [please open a new issue](https://
 
 ## Copyright & License
 
-Code copyright 2020 Florian Weinaug.
+Code copyright 2020–2021 Florian Weinaug.
 Code released under the [MIT license](https://github.com/fweinaug/expandable_text/blob/master/LICENSE).
