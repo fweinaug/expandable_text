@@ -73,6 +73,19 @@ void main() {
     expect(findTextSpanByText('less'), findsOneWidget);
   });
 
+  testWidgets('Expanded widget hides link when collapse text is null', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', collapseText: null, expanded: true)),
+    );
+
+    expect(findTextSpanByText('\u2026'), findsNothing);
+    expect(findTextSpanByText('more'), findsNothing);
+    expect(findTextSpanByText('null'), findsNothing);
+  });
+
   testWidgets('Ellipsis has the link color if linkEllipsis is true', (WidgetTester tester) async {
     final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
     await binding.setSurfaceSize(SMALL_SCREEN);

@@ -8,7 +8,7 @@ class ExpandableText extends StatefulWidget {
     this.text, {
     Key key,
     @required this.expandText,
-    @required this.collapseText,
+    this.collapseText,
     this.expanded = false,
     this.onExpandedChanged,
     this.linkColor,
@@ -21,7 +21,6 @@ class ExpandableText extends StatefulWidget {
     this.semanticsLabel,
   }) : assert(text != null),
        assert(expandText != null),
-       assert(collapseText != null),
        assert(expanded != null),
        assert(linkEllipsis != null),
        assert(maxLines != null && maxLines > 0),
@@ -80,7 +79,10 @@ class ExpandableTextState extends State<ExpandableText> {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
     }
 
-    final linkText = _expanded ? ' ${widget.collapseText}' : widget.expandText;
+    final collapseText = widget.collapseText != null ? ' ${widget.collapseText}' : '';
+    final expandText = widget.expandText;
+
+    final linkText = _expanded ? collapseText : expandText;
     final linkColor = widget.linkColor ?? Theme.of(context).accentColor;
     final linkTextStyle = effectiveTextStyle.copyWith(color: linkColor);
 
@@ -91,7 +93,7 @@ class ExpandableTextState extends State<ExpandableText> {
           style: widget.linkEllipsis ? linkTextStyle : effectiveTextStyle,
           recognizer: widget.linkEllipsis ? _tapGestureRecognizer : null,
         ),
-        TextSpan(
+        if (linkText.length > 0) TextSpan(
           text: linkText,
           style: linkTextStyle,
           recognizer: _tapGestureRecognizer,
