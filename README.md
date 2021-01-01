@@ -41,6 +41,16 @@ Widget build(BuildContext context) {
 }
 ```
 
+### Features
+
+- Link to expand the collapsed text (`expandText`)
+- Optional link to collapse the expanded text (`collapseText`)
+- Configure the color of the link (`linkColor`)
+- Control whether the ellipsis is part of the link (`linkEllipsis`)
+- Configure the number of visible lines of the collapsed text (`maxLines`)
+- Control the default expanded state (`expanded`)
+- Callback for expanded changed event (`onExpandedChanged`)
+
 ## Bugs and feature requests
 
 Have a bug or a feature request? Please first search for existing and closed issues.
