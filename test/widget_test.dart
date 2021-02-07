@@ -11,7 +11,7 @@ const PREFIX = 'Prefix text';
 
 void main() {
   testWidgets('Collapsed widget shows truncated text with ellipsis', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -23,7 +23,7 @@ void main() {
   });
 
   testWidgets('Expanded widget shows full text', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -35,7 +35,7 @@ void main() {
   });
 
   testWidgets('Non-expandable widget shows no link', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(LARGE_SCREEN);
 
     await tester.pumpWidget(
@@ -48,7 +48,7 @@ void main() {
   });
 
   testWidgets('Collapsed widget shows link with expand text', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -61,7 +61,7 @@ void main() {
   });
 
   testWidgets('Expanded widget shows link with collapse text', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -74,7 +74,7 @@ void main() {
   });
 
   testWidgets('Expanded widget hides link when collapse text is null', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -87,7 +87,7 @@ void main() {
   });
 
   testWidgets('Ellipsis has the link color if linkEllipsis is true', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -100,7 +100,7 @@ void main() {
   });
 
   testWidgets('Ellipsis has NOT the link color if linkEllipsis is false', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -113,7 +113,7 @@ void main() {
   });
 
   testWidgets('Link has the link style applied', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -125,7 +125,7 @@ void main() {
   });
 
   testWidgets('Link has always the link color applied', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -137,7 +137,7 @@ void main() {
   });
 
   testWidgets('Prefix is visible when the widget is collapsed', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -149,7 +149,7 @@ void main() {
   });
 
   testWidgets('Prefix is visible when the widget is expanded', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
@@ -161,7 +161,7 @@ void main() {
   });
 
   testWidgets('Prefix has the prefix style applied', (WidgetTester tester) async {
-    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(

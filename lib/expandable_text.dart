@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 class ExpandableText extends StatefulWidget {
   const ExpandableText(
     this.text, {
-    Key key,
-    @required this.expandText,
+    Key? key,
+    required this.expandText,
     this.collapseText,
     this.expanded = false,
     this.onExpandedChanged,
@@ -23,30 +23,26 @@ class ExpandableText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines = 2,
     this.semanticsLabel,
-  }) : assert(text != null),
-       assert(expandText != null),
-       assert(expanded != null),
-       assert(linkEllipsis != null),
-       assert(maxLines != null && maxLines > 0),
+  }) : assert(maxLines > 0),
        super(key: key);
 
   final String text;
   final String expandText;
-  final String collapseText;
+  final String? collapseText;
   final bool expanded;
-  final ValueChanged<bool> onExpandedChanged;
-  final Color linkColor;
+  final ValueChanged<bool>? onExpandedChanged;
+  final Color? linkColor;
   final bool linkEllipsis;
-  final TextStyle linkStyle;
-  final String prefixText;
-  final TextStyle prefixStyle;
-  final VoidCallback onPrefixTap;
-  final TextStyle style;
-  final TextDirection textDirection;
-  final TextAlign textAlign;
-  final double textScaleFactor;
+  final TextStyle? linkStyle;
+  final String? prefixText;
+  final TextStyle? prefixStyle;
+  final VoidCallback? onPrefixTap;
+  final TextStyle? style;
+  final TextDirection? textDirection;
+  final TextAlign? textAlign;
+  final double? textScaleFactor;
   final int maxLines;
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   @override
   ExpandableTextState createState() => ExpandableTextState();
@@ -54,8 +50,8 @@ class ExpandableText extends StatefulWidget {
 
 class ExpandableTextState extends State<ExpandableText> {
   bool _expanded = false;
-  TapGestureRecognizer _linkTapGestureRecognizer;
-  TapGestureRecognizer _prefixTapGestureRecognizer;
+  late TapGestureRecognizer _linkTapGestureRecognizer;
+  late TapGestureRecognizer _prefixTapGestureRecognizer;
 
   @override
   void initState() {
@@ -90,14 +86,14 @@ class ExpandableTextState extends State<ExpandableText> {
   @override
   Widget build(BuildContext context) {
     final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-    TextStyle effectiveTextStyle = widget.style;
-    if (widget.style == null || widget.style.inherit) {
+    var effectiveTextStyle = widget.style;
+    if (widget.style == null || widget.style!.inherit) {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
     }
 
     final linkText = (_expanded ? widget.collapseText : widget.expandText) ?? '';
     final linkColor = widget.linkColor ?? widget.linkStyle?.color ?? Theme.of(context).accentColor;
-    final linkTextStyle = effectiveTextStyle.merge(widget.linkStyle).copyWith(color: linkColor);
+    final linkTextStyle = effectiveTextStyle!.merge(widget.linkStyle).copyWith(color: linkColor);
 
     final link = TextSpan(
       children: [
@@ -123,7 +119,7 @@ class ExpandableTextState extends State<ExpandableText> {
     );
 
     final prefix = TextSpan(
-      text: widget.prefixText != null && widget.prefixText.isNotEmpty ? '${widget.prefixText} ' : '',
+      text: widget.prefixText != null && widget.prefixText!.isNotEmpty ? '${widget.prefixText} ' : '',
       style: effectiveTextStyle.merge(widget.prefixStyle),
       recognizer: _prefixTapGestureRecognizer,
     );
@@ -146,7 +142,7 @@ class ExpandableTextState extends State<ExpandableText> {
         final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
         final textDirection = widget.textDirection ?? Directionality.of(context);
         final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
-        final locale = Localizations.localeOf(context, nullOk: true);
+        final locale = Localizations.maybeLocaleOf(context);
 
         TextPainter textPainter = TextPainter(
           text: link,

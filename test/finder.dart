@@ -21,8 +21,8 @@ bool _isRichTextWithTextSpan(Widget widget, bool Function(TextSpan) predicate) {
     if (span is TextSpan) {
       if (predicate(span)) {
         return true;
-      } else if (span.children != null && span.children.length > 0) {
-        for (InlineSpan child in span.children) {
+      } else if (span.children != null && span.children!.length > 0) {
+        for (InlineSpan child in span.children!) {
           if (containsTextSpan(child, predicate)) {
             return true;
           }
