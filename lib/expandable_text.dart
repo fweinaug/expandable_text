@@ -14,6 +14,9 @@ class ExpandableText extends StatefulWidget {
     this.linkColor,
     this.linkEllipsis = true,
     this.linkStyle,
+    this.prefixText,
+    this.prefixStyle,
+    this.onPrefixTap,
     this.style,
     this.textDirection,
     this.textAlign,
@@ -35,6 +38,9 @@ class ExpandableText extends StatefulWidget {
   final Color linkColor;
   final bool linkEllipsis;
   final TextStyle linkStyle;
+  final String prefixText;
+  final TextStyle prefixStyle;
+  final VoidCallback onPrefixTap;
   final TextStyle style;
   final TextDirection textDirection;
   final TextAlign textAlign;
@@ -48,20 +54,24 @@ class ExpandableText extends StatefulWidget {
 
 class ExpandableTextState extends State<ExpandableText> {
   bool _expanded = false;
-  TapGestureRecognizer _tapGestureRecognizer;
+  TapGestureRecognizer _linkTapGestureRecognizer;
+  TapGestureRecognizer _prefixTapGestureRecognizer;
 
   @override
   void initState() {
     super.initState();
 
     _expanded = widget.expanded;
-    _tapGestureRecognizer = TapGestureRecognizer()
+    _linkTapGestureRecognizer = TapGestureRecognizer()
       ..onTap = _toggleExpanded;
+    _prefixTapGestureRecognizer = TapGestureRecognizer()
+      ..onTap = _prefixTapped;
   }
 
   @override
   void dispose() {
-    _tapGestureRecognizer.dispose();
+    _linkTapGestureRecognizer.dispose();
+    _prefixTapGestureRecognizer.dispose();
     super.dispose();
   }
 
@@ -71,6 +81,10 @@ class ExpandableTextState extends State<ExpandableText> {
     setState(() => _expanded = toggledExpanded);
 
     widget.onExpandedChanged?.call(toggledExpanded);
+  }
+
+  void _prefixTapped() {
+    widget.onPrefixTap?.call();
   }
 
   @override
@@ -90,7 +104,7 @@ class ExpandableTextState extends State<ExpandableText> {
         if (!_expanded) TextSpan(
           text: '\u2026 ',
           style: widget.linkEllipsis ? linkTextStyle : effectiveTextStyle,
-          recognizer: widget.linkEllipsis ? _tapGestureRecognizer : null,
+          recognizer: widget.linkEllipsis ? _linkTapGestureRecognizer : null,
         ),
         if (linkText.length > 0) TextSpan(
           style: effectiveTextStyle,
@@ -101,16 +115,27 @@ class ExpandableTextState extends State<ExpandableText> {
             TextSpan(
               text: linkText,
               style: linkTextStyle,
-              recognizer: _tapGestureRecognizer,
+              recognizer: _linkTapGestureRecognizer,
             ),
           ],
         ),
       ],
     );
 
+    final prefix = TextSpan(
+      text: widget.prefixText != null && widget.prefixText.isNotEmpty ? '${widget.prefixText} ' : '',
+      style: effectiveTextStyle.merge(widget.prefixStyle),
+      recognizer: _prefixTapGestureRecognizer,
+    );
+
     final text = TextSpan(
-      text: widget.text,
-      style: effectiveTextStyle,
+      children: <TextSpan>[
+        prefix,
+        TextSpan(
+          text: widget.text,
+          style: effectiveTextStyle,
+        ),
+      ],
     );
 
     Widget result = LayoutBuilder(
@@ -134,6 +159,10 @@ class ExpandableTextState extends State<ExpandableText> {
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final linkSize = textPainter.size;
 
+        textPainter.text = prefix;
+        textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
+        final prefixSize = textPainter.size;
+
         textPainter.text = text;
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final textSize = textPainter.size;
@@ -141,17 +170,20 @@ class ExpandableTextState extends State<ExpandableText> {
         TextSpan textSpan;
         if (textPainter.didExceedMaxLines) {
           final position = textPainter.getPositionForOffset(Offset(
-            textSize.width - linkSize.width,
+            textSize.width - linkSize.width - prefixSize.width,
             textSize.height,
           ));
           final endOffset = textPainter.getOffsetBefore(position.offset);
 
           textSpan = TextSpan(
             style: effectiveTextStyle,
-            text: _expanded
-                ? widget.text
-                : widget.text.substring(0, endOffset),
             children: <TextSpan>[
+              prefix,
+              TextSpan(
+                text: _expanded
+                    ? widget.text
+                    : widget.text.substring(0, endOffset),
+              ),
               link,
             ],
           );

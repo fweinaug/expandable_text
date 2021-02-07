@@ -7,6 +7,7 @@ import 'finder.dart';
 const SMALL_SCREEN = Size(10, 400);
 const LARGE_SCREEN = Size(1000, 400);
 const TEXT = 'A long text to test the widget';
+const PREFIX = 'Prefix text';
 
 void main() {
   testWidgets('Collapsed widget shows truncated text with ellipsis', (WidgetTester tester) async {
@@ -18,7 +19,6 @@ void main() {
     );
 
     expect(findTextSpan((span) => span.text == TEXT), findsNothing);
-    expect(findTextSpan((span) => TEXT.startsWith(span.text)), findsOneWidget);
     expect(findTextSpanByText('\u2026'), findsOneWidget);
   });
 
@@ -134,5 +134,41 @@ void main() {
     );
 
     expect(findTextSpanByTextAndColor('more', Colors.red), findsOneWidget);
+  });
+
+  testWidgets('Prefix is visible when the widget is collapsed', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(
+          home: ExpandableText(TEXT, prefixText: PREFIX, expanded: false, expandText: 'more')),
+    );
+
+    expect(findTextSpanByText(PREFIX), findsOneWidget);
+  });
+
+  testWidgets('Prefix is visible when the widget is expanded', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(
+          home: ExpandableText(TEXT, prefixText: PREFIX, expanded: true, expandText: 'more')),
+    );
+
+    expect(findTextSpanByText(PREFIX), findsOneWidget);
+  });
+
+  testWidgets('Prefix has the prefix style applied', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(
+          home: ExpandableText(TEXT, prefixText: PREFIX, prefixStyle: TextStyle(color: Colors.red), expandText: 'more')),
+    );
+
+    expect(findTextSpanByTextAndColor(PREFIX, Colors.red), findsOneWidget);
   });
 }
