@@ -13,6 +13,7 @@ class ExpandableText extends StatefulWidget {
     this.onExpandedChanged,
     this.linkColor,
     this.linkEllipsis = true,
+    this.linkStyle,
     this.style,
     this.textDirection,
     this.textAlign,
@@ -33,6 +34,7 @@ class ExpandableText extends StatefulWidget {
   final ValueChanged<bool> onExpandedChanged;
   final Color linkColor;
   final bool linkEllipsis;
+  final TextStyle linkStyle;
   final TextStyle style;
   final TextDirection textDirection;
   final TextAlign textAlign;
@@ -79,12 +81,9 @@ class ExpandableTextState extends State<ExpandableText> {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
     }
 
-    final collapseText = widget.collapseText != null ? ' ${widget.collapseText}' : '';
-    final expandText = widget.expandText;
-
-    final linkText = _expanded ? collapseText : expandText;
-    final linkColor = widget.linkColor ?? Theme.of(context).accentColor;
-    final linkTextStyle = effectiveTextStyle.copyWith(color: linkColor);
+    final linkText = (_expanded ? widget.collapseText : widget.expandText) ?? '';
+    final linkColor = widget.linkColor ?? widget.linkStyle?.color ?? Theme.of(context).accentColor;
+    final linkTextStyle = effectiveTextStyle.merge(widget.linkStyle).copyWith(color: linkColor);
 
     final link = TextSpan(
       children: [
@@ -94,9 +93,17 @@ class ExpandableTextState extends State<ExpandableText> {
           recognizer: widget.linkEllipsis ? _tapGestureRecognizer : null,
         ),
         if (linkText.length > 0) TextSpan(
-          text: linkText,
-          style: linkTextStyle,
-          recognizer: _tapGestureRecognizer,
+          style: effectiveTextStyle,
+          children: <TextSpan>[
+            if (_expanded) TextSpan(
+              text: ' ',
+            ),
+            TextSpan(
+              text: linkText,
+              style: linkTextStyle,
+              recognizer: _tapGestureRecognizer,
+            ),
+          ],
         ),
       ],
     );

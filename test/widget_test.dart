@@ -111,4 +111,28 @@ void main() {
     expect(findTextSpanByText('\u2026'), findsOneWidget);
     expect(findTextSpanByTextAndColor('\u2026', Colors.red), findsNothing);
   });
+
+  testWidgets('Link has the link style applied', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(
+          home: ExpandableText(TEXT, expandText: 'more', collapseText: 'less', expanded: false, linkEllipsis: false, linkStyle: TextStyle(color: Colors.red))),
+    );
+
+    expect(findTextSpanByTextAndColor('more', Colors.red), findsOneWidget);
+  });
+
+  testWidgets('Link has always the link color applied', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(
+          home: ExpandableText(TEXT, expandText: 'more', collapseText: 'less', expanded: false, linkEllipsis: false, linkColor: Colors.red, linkStyle: TextStyle(color: Colors.blue))),
+    );
+
+    expect(findTextSpanByTextAndColor('more', Colors.red), findsOneWidget);
+  });
 }
