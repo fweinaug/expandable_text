@@ -16,7 +16,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  expandable_text: 1.2.0
+  expandable_text: 1.3.0
 ```
 
 Next, import the package into your dart code:
@@ -45,8 +45,9 @@ Widget build(BuildContext context) {
 
 - Link to expand the collapsed text (`expandText`)
 - Optional link to collapse the expanded text (`collapseText`)
-- Configure the color of the link (`linkColor`)
+- Configure the style of the link (`linkStyle` / `linkColor`)
 - Control whether the ellipsis is part of the link (`linkEllipsis`)
+- Optional prefix text with style and tap callback (`prefixText`, `prefixStyle`, `onPrefixTap`)
 - Configure the number of visible lines of the collapsed text (`maxLines`)
 - Control the default expanded state (`expanded`)
 - Callback for expanded changed event (`onExpandedChanged`)

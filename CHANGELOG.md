@@ -1,3 +1,8 @@
+## 1.3.0
+
+- New optional prefix (`prefixText`, `prefixStyle`, `onPrefixTap`)
+- New option to change the link style (`linkStyle`)
+
 ## 1.2.0
 
 Optional expand text, to disable collapsing
