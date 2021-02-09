@@ -16,7 +16,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  expandable_text: 1.3.0
+  expandable_text: 1.3.1
 ```
 
 Next, import the package into your dart code:
