@@ -1,5 +1,7 @@
 library expandable_text;
 
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -180,7 +182,7 @@ class ExpandableTextState extends State<ExpandableText> {
               TextSpan(
                 text: _expanded
                     ? widget.text
-                    : widget.text.substring(0, endOffset),
+                    : widget.text.substring(0, max(endOffset, 0)),
               ),
               link,
             ],
