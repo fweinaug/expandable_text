@@ -97,7 +97,7 @@ class ExpandableTextState extends State<ExpandableText> {
     final linkColor = widget.linkColor ?? widget.linkStyle?.color ?? Theme.of(context).accentColor;
     final linkTextStyle = effectiveTextStyle!.merge(widget.linkStyle).copyWith(color: linkColor);
 
-    final prefixText = widget.prefixText != null && widget.prefixText.isNotEmpty ? '${widget.prefixText} ' : '';
+    final prefixText = widget.prefixText != null && widget.prefixText!.isNotEmpty ? '${widget.prefixText} ' : '';
 
     final link = TextSpan(
       children: [
@@ -169,7 +169,7 @@ class ExpandableTextState extends State<ExpandableText> {
             textSize.width - linkSize.width,
             textSize.height,
           ));
-          final endOffset = textPainter.getOffsetBefore(position.offset) - prefixText.length;
+          final endOffset = (textPainter.getOffsetBefore(position.offset) ?? 0) - prefixText.length;
 
           textSpan = TextSpan(
             style: effectiveTextStyle,
