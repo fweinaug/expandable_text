@@ -1,5 +1,7 @@
 library expandable_text;
 
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -95,6 +97,8 @@ class ExpandableTextState extends State<ExpandableText> {
     final linkColor = widget.linkColor ?? widget.linkStyle?.color ?? Theme.of(context).accentColor;
     final linkTextStyle = effectiveTextStyle!.merge(widget.linkStyle).copyWith(color: linkColor);
 
+    final prefixText = widget.prefixText != null && widget.prefixText.isNotEmpty ? '${widget.prefixText} ' : '';
+
     final link = TextSpan(
       children: [
         if (!_expanded) TextSpan(
@@ -119,7 +123,7 @@ class ExpandableTextState extends State<ExpandableText> {
     );
 
     final prefix = TextSpan(
-      text: widget.prefixText != null && widget.prefixText!.isNotEmpty ? '${widget.prefixText} ' : '',
+      text: prefixText,
       style: effectiveTextStyle.merge(widget.prefixStyle),
       recognizer: _prefixTapGestureRecognizer,
     );
@@ -155,10 +159,6 @@ class ExpandableTextState extends State<ExpandableText> {
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final linkSize = textPainter.size;
 
-        textPainter.text = prefix;
-        textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
-        final prefixSize = textPainter.size;
-
         textPainter.text = text;
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final textSize = textPainter.size;
@@ -166,10 +166,10 @@ class ExpandableTextState extends State<ExpandableText> {
         TextSpan textSpan;
         if (textPainter.didExceedMaxLines) {
           final position = textPainter.getPositionForOffset(Offset(
-            textSize.width - linkSize.width - prefixSize.width,
+            textSize.width - linkSize.width,
             textSize.height,
           ));
-          final endOffset = textPainter.getOffsetBefore(position.offset);
+          final endOffset = textPainter.getOffsetBefore(position.offset) - prefixText.length;
 
           textSpan = TextSpan(
             style: effectiveTextStyle,
@@ -178,7 +178,7 @@ class ExpandableTextState extends State<ExpandableText> {
               TextSpan(
                 text: _expanded
                     ? widget.text
-                    : widget.text.substring(0, endOffset),
+                    : widget.text.substring(0, max(endOffset, 0)),
               ),
               link,
             ],

@@ -2,6 +2,14 @@
 
 Null safety migration
 
+## 1.3.2
+
+Fix expand link line break when using `prefixText`
+
+## 1.3.1
+
+Fix expand link line break when using `prefixText`
+
 ## 1.3.0
 
 - New optional prefix (`prefixText`, `prefixStyle`, `onPrefixTap`)
