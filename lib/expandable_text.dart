@@ -150,7 +150,14 @@ class ExpandableTextState extends State<ExpandableText> {
         final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
         final textDirection = widget.textDirection ?? Directionality.of(context);
         final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
-        final locale = Localizations.localeOf(context, nullOk: true);
+
+        Locale? locale = null;
+
+        try {
+          locale = Localizations.localeOf(context);
+        } on FlutterError {
+          // pass -- locale is already null.
+        }
 
         TextPainter textPainter = TextPainter(
           text: link,
