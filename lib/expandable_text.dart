@@ -151,7 +151,7 @@ class ExpandableTextState extends State<ExpandableText> {
         final textDirection = widget.textDirection ?? Directionality.of(context);
         final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
 
-        Locale? locale = null;
+        Locale locale = null;
 
         try {
           locale = Localizations.localeOf(context);
