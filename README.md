@@ -16,7 +16,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  expandable_text: 2.0.0-nullsafety.1
+  expandable_text: 2.0.0
 ```
 
 Next, import the package into your dart code:

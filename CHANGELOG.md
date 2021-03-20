@@ -1,6 +1,6 @@
-## 2.0.0-nullsafety.1
+## 2.0.0
 
-Null safety migration
+Null safety support
 
 ## 1.3.2
 
