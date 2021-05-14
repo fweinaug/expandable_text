@@ -26,6 +26,8 @@ class ExpandableText extends StatefulWidget {
     this.textAlign,
     this.textScaleFactor,
     this.maxLines = 2,
+    this.animation = false,
+    this.animationDuration,
     this.semanticsLabel,
   })  : assert(maxLines > 0),
         super(key: key);
@@ -48,13 +50,16 @@ class ExpandableText extends StatefulWidget {
   final TextAlign? textAlign;
   final double? textScaleFactor;
   final int maxLines;
+  final bool animation;
+  final Duration? animationDuration;
   final String? semanticsLabel;
 
   @override
   ExpandableTextState createState() => ExpandableTextState();
 }
 
-class ExpandableTextState extends State<ExpandableText> {
+class ExpandableTextState extends State<ExpandableText>
+    with TickerProviderStateMixin {
   bool _expanded = false;
   late TapGestureRecognizer _linkTapGestureRecognizer;
   late TapGestureRecognizer _prefixTapGestureRecognizer;
@@ -209,7 +214,7 @@ class ExpandableTextState extends State<ExpandableText> {
           textSpan = text;
         }
 
-        return RichText(
+        final richText = RichText(
           text: textSpan,
           softWrap: true,
           textDirection: textDirection,
@@ -217,6 +222,18 @@ class ExpandableTextState extends State<ExpandableText> {
           textScaleFactor: textScaleFactor,
           overflow: TextOverflow.clip,
         );
+
+        if (widget.animation) {
+          return AnimatedSize(
+            child: richText,
+            duration: widget.animationDuration ?? Duration(milliseconds: 200),
+            curve: Curves.fastLinearToSlowEaseIn,
+            alignment: Alignment.topLeft,
+            vsync: this,
+          );
+        }
+
+        return richText;
       },
     );
 

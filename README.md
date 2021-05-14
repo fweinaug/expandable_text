@@ -44,6 +44,7 @@ Widget build(BuildContext context) {
 ### Features
 
 - Link to expand the collapsed text (`expandText`)
+- Expand and collapse animation (`animation`, `animationDuration`)
 - Optional link to collapse the expanded text (`collapseText`)
 - Configure the style of the link (`linkStyle` / `linkColor`)
 - Control whether the ellipsis is part of the link (`linkEllipsis`)
