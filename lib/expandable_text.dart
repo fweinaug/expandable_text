@@ -19,6 +19,8 @@ class ExpandableText extends StatefulWidget {
     this.prefixText,
     this.prefixStyle,
     this.onPrefixTap,
+    this.expandOnTextTap = false,
+    this.collapseOnTextTap = false,
     this.style,
     this.textDirection,
     this.textAlign,
@@ -39,6 +41,8 @@ class ExpandableText extends StatefulWidget {
   final String? prefixText;
   final TextStyle? prefixStyle;
   final VoidCallback? onPrefixTap;
+  final bool expandOnTextTap;
+  final bool collapseOnTextTap;
   final TextStyle? style;
   final TextDirection? textDirection;
   final TextAlign? textAlign;
@@ -179,6 +183,9 @@ class ExpandableTextState extends State<ExpandableText> {
                 text: _expanded
                     ? widget.text
                     : widget.text.substring(0, max(endOffset, 0)),
+                recognizer: (_expanded ? widget.collapseOnTextTap : widget.expandOnTextTap)
+                    ? _linkTapGestureRecognizer
+                    : null,
               ),
               link,
             ],

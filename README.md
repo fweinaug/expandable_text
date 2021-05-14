@@ -51,6 +51,7 @@ Widget build(BuildContext context) {
 - Configure the number of visible lines of the collapsed text (`maxLines`)
 - Control the default expanded state (`expanded`)
 - Callback for expanded changed event (`onExpandedChanged`)
+- Tap on the text to expand or collapse the text (`expandOnTextTap`, `collapseOnTextTap`)
 
 ## Bugs and feature requests
 

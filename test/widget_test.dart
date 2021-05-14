@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'finder.dart';
 
-const SMALL_SCREEN = Size(10, 400);
+const SMALL_SCREEN = Size(300, 400);
 const LARGE_SCREEN = Size(1000, 400);
 const TEXT = 'A long text to test the widget';
 const PREFIX = 'Prefix text';
@@ -170,5 +170,49 @@ void main() {
     );
 
     expect(findTextSpanByTextAndColor(PREFIX, Colors.red), findsOneWidget);
+  });
+
+  testWidgets('Collapsed text is NOT expandable by tap', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', expandOnTextTap: false, collapseOnTextTap: true, expanded: false)),
+    );
+
+    expect(findTextSpanWithTapGestureRecognizerAndStartingWith(TEXT), findsNothing);
+  });
+
+  testWidgets('Collapsed text is expandable by tap if expandOnTextTap is true', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', expandOnTextTap: true, collapseOnTextTap: false, expanded: false)),
+    );
+
+    expect(findTextSpanWithTapGestureRecognizerAndStartingWith(TEXT), findsOneWidget);
+  });
+
+  testWidgets('Expanded text is NOT collapsable by tap', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', expandOnTextTap: true, collapseOnTextTap: false, expanded: true)),
+    );
+
+    expect(findTextSpanWithTapGestureRecognizerAndStartingWith(TEXT), findsNothing);
+  });
+
+  testWidgets('Expanded text is collapsable by tap if collapseOnTextTap is true', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', expandOnTextTap: false, collapseOnTextTap: true, expanded: true)),
+    );
+
+    expect(findTextSpanWithTapGestureRecognizerAndStartingWith(TEXT), findsOneWidget);
   });
 }
