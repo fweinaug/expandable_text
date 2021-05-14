@@ -27,8 +27,8 @@ class ExpandableText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines = 2,
     this.semanticsLabel,
-  }) : assert(maxLines > 0),
-       super(key: key);
+  })  : assert(maxLines > 0),
+        super(key: key);
 
   final String text;
   final String expandText;
@@ -64,10 +64,8 @@ class ExpandableTextState extends State<ExpandableText> {
     super.initState();
 
     _expanded = widget.expanded;
-    _linkTapGestureRecognizer = TapGestureRecognizer()
-      ..onTap = _toggleExpanded;
-    _prefixTapGestureRecognizer = TapGestureRecognizer()
-      ..onTap = _prefixTapped;
+    _linkTapGestureRecognizer = TapGestureRecognizer()..onTap = _toggleExpanded;
+    _prefixTapGestureRecognizer = TapGestureRecognizer()..onTap = _prefixTapped;
   }
 
   @override
@@ -97,32 +95,42 @@ class ExpandableTextState extends State<ExpandableText> {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
     }
 
-    final linkText = (_expanded ? widget.collapseText : widget.expandText) ?? '';
-    final linkColor = widget.linkColor ?? widget.linkStyle?.color ?? Theme.of(context).accentColor;
-    final linkTextStyle = effectiveTextStyle!.merge(widget.linkStyle).copyWith(color: linkColor);
+    final linkText =
+        (_expanded ? widget.collapseText : widget.expandText) ?? '';
+    final linkColor = widget.linkColor ??
+        widget.linkStyle?.color ??
+        Theme.of(context).accentColor;
+    final linkTextStyle =
+        effectiveTextStyle!.merge(widget.linkStyle).copyWith(color: linkColor);
 
-    final prefixText = widget.prefixText != null && widget.prefixText!.isNotEmpty ? '${widget.prefixText} ' : '';
+    final prefixText =
+        widget.prefixText != null && widget.prefixText!.isNotEmpty
+            ? '${widget.prefixText} '
+            : '';
 
     final link = TextSpan(
       children: [
-        if (!_expanded) TextSpan(
-          text: '\u2026 ',
-          style: widget.linkEllipsis ? linkTextStyle : effectiveTextStyle,
-          recognizer: widget.linkEllipsis ? _linkTapGestureRecognizer : null,
-        ),
-        if (linkText.length > 0) TextSpan(
-          style: effectiveTextStyle,
-          children: <TextSpan>[
-            if (_expanded) TextSpan(
-              text: ' ',
-            ),
-            TextSpan(
-              text: linkText,
-              style: linkTextStyle,
-              recognizer: _linkTapGestureRecognizer,
-            ),
-          ],
-        ),
+        if (!_expanded)
+          TextSpan(
+            text: '\u2026 ',
+            style: widget.linkEllipsis ? linkTextStyle : effectiveTextStyle,
+            recognizer: widget.linkEllipsis ? _linkTapGestureRecognizer : null,
+          ),
+        if (linkText.length > 0)
+          TextSpan(
+            style: effectiveTextStyle,
+            children: <TextSpan>[
+              if (_expanded)
+                TextSpan(
+                  text: ' ',
+                ),
+              TextSpan(
+                text: linkText,
+                style: linkTextStyle,
+                recognizer: _linkTapGestureRecognizer,
+              ),
+            ],
+          ),
       ],
     );
 
@@ -147,9 +155,12 @@ class ExpandableTextState extends State<ExpandableText> {
         assert(constraints.hasBoundedWidth);
         final double maxWidth = constraints.maxWidth;
 
-        final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
-        final textDirection = widget.textDirection ?? Directionality.of(context);
-        final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
+        final textAlign =
+            widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
+        final textDirection =
+            widget.textDirection ?? Directionality.of(context);
+        final textScaleFactor =
+            widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
         final locale = Localizations.maybeLocaleOf(context);
 
         TextPainter textPainter = TextPainter(
@@ -173,7 +184,9 @@ class ExpandableTextState extends State<ExpandableText> {
             textSize.width - linkSize.width,
             textSize.height,
           ));
-          final endOffset = (textPainter.getOffsetBefore(position.offset) ?? 0) - prefixText.length;
+          final endOffset =
+              (textPainter.getOffsetBefore(position.offset) ?? 0) -
+                  prefixText.length;
 
           textSpan = TextSpan(
             style: effectiveTextStyle,
@@ -183,7 +196,9 @@ class ExpandableTextState extends State<ExpandableText> {
                 text: _expanded
                     ? widget.text
                     : widget.text.substring(0, max(endOffset, 0)),
-                recognizer: (_expanded ? widget.collapseOnTextTap : widget.expandOnTextTap)
+                recognizer: (_expanded
+                        ? widget.collapseOnTextTap
+                        : widget.expandOnTextTap)
                     ? _linkTapGestureRecognizer
                     : null,
               ),
