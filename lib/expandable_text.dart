@@ -104,7 +104,7 @@ class ExpandableTextState extends State<ExpandableText>
         (_expanded ? widget.collapseText : widget.expandText) ?? '';
     final linkColor = widget.linkColor ??
         widget.linkStyle?.color ??
-        Theme.of(context).accentColor;
+        Theme.of(context).colorScheme.secondary;
     final linkTextStyle =
         effectiveTextStyle!.merge(widget.linkStyle).copyWith(color: linkColor);
 
