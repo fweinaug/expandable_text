@@ -10,13 +10,13 @@ let's the user expand the full text, or collapse it again.
 
 ![Example with maxLines=1](example/example.png)
 
-## Getting Started
+## Getting started
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  expandable_text: 2.0.0
+  expandable_text: 2.1.0
 ```
 
 Next, import the package into your dart code:

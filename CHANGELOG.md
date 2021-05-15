@@ -1,3 +1,8 @@
+## 2.1.0
+
+- Expand and collapse animation (`animation`, `animationDuration`)
+- Tap on the text to expand or collapse the text (`expandOnTextTap`, `collapseOnTextTap`)
+
 ## 2.0.0
 
 Null safety support
