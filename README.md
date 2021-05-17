@@ -39,7 +39,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-### Features
+## Features
 
 - Link to expand the collapsed text (`expandText`)
 - Expand and collapse animation (`animation`, `animationDuration`, `animationCurve`)
