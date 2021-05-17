@@ -28,6 +28,7 @@ class ExpandableText extends StatefulWidget {
     this.maxLines = 2,
     this.animation = false,
     this.animationDuration,
+    this.animationCurve,
     this.semanticsLabel,
   })  : assert(maxLines > 0),
         super(key: key);
@@ -52,6 +53,7 @@ class ExpandableText extends StatefulWidget {
   final int maxLines;
   final bool animation;
   final Duration? animationDuration;
+  final Curve? animationCurve;
   final String? semanticsLabel;
 
   @override
@@ -227,7 +229,7 @@ class ExpandableTextState extends State<ExpandableText>
           return AnimatedSize(
             child: richText,
             duration: widget.animationDuration ?? Duration(milliseconds: 200),
-            curve: Curves.fastLinearToSlowEaseIn,
+            curve: widget.animationCurve ?? Curves.fastLinearToSlowEaseIn,
             alignment: Alignment.topLeft,
             vsync: this,
           );

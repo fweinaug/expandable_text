@@ -1,5 +1,3 @@
-# expandable_text
-
 ![Build](https://github.com/fweinaug/expandable_text/workflows/Build/badge.svg)
 [![pub package](https://img.shields.io/pub/v/expandable_text.svg)](https://pub.dev/packages/expandable_text)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/fweinaug/expandable_text/blob/master/LICENSE)
@@ -8,7 +6,7 @@ This Flutter package includes the widget `ExpandableText` which you can use to i
 defined number of lines of a probably long text. The widget appends a configurable text link which
 let's the user expand the full text, or collapse it again.
 
-![Example with maxLines=1](example/example.png)
+![Example with maxLines=1](https://user-images.githubusercontent.com/17765766/118534275-531f7c00-b749-11eb-90e9-e6eb36808eec.gif)
 
 ## Getting started
 
@@ -44,7 +42,7 @@ Widget build(BuildContext context) {
 ### Features
 
 - Link to expand the collapsed text (`expandText`)
-- Expand and collapse animation (`animation`, `animationDuration`)
+- Expand and collapse animation (`animation`, `animationDuration`, `animationCurve`)
 - Optional link to collapse the expanded text (`collapseText`)
 - Configure the style of the link (`linkStyle` / `linkColor`)
 - Control whether the ellipsis is part of the link (`linkEllipsis`)
