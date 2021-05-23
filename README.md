@@ -25,7 +25,7 @@ import 'package:expandable_text/expandable_text.dart';
 
 ### Usage
 
-Example which shows an expandable text if `longText` exceeds one line:
+Show an expandable text if `longText` exceeds one line:
 
 ```dart
 Widget build(BuildContext context) {
@@ -35,6 +35,42 @@ Widget build(BuildContext context) {
         collapseText: 'show less',
         maxLines: 1,
         linkColor: Colors.blue,
+    );
+}
+```
+
+#### Advanced example
+
+This example shows a `message` that was posted by a user.
+The `username` is always visible right before the text and tapping on it opens the user profile.
+The text is truncated after two lines and can be expanded by tapping on the link *show more* at the end or the text itself.
+After the text was expanded it cannot be collapsed again as no `collapseText` was provided.
+Links, @mentions and #hashtags in the text are styled differently and can be tapped to open the browser or the user profile.
+
+```dart
+Widget build(BuildContext context) {
+    return ExpandableText(
+        message,
+        expandText: 'show more',
+        maxLines: 2,
+        linkColor: Colors.blue,
+        animation: true,
+        collapseOnTextTap: true,
+        prefixText: username,
+        onPrefixTap: () => showProfile(username),
+        prefixStyle: TextStyle(fontWeight: FontWeight.bold),
+        onHashtagTap: (name) => showHashtag(name),
+        hashtagStyle: TextStyle(
+            color: Color(0xFF30B6F9),
+        ),
+        onMentionTap: (username) => showProfile(username),
+        mentionStyle: TextStyle(
+            fontWeight: FontWeight.w600,
+        ),
+        onUrlTap: (url) => launchUrl(url),
+        urlStyle: TextStyle(
+            decoration: TextDecoration.underline,
+        ),
     );
 }
 ```
