@@ -5,6 +5,10 @@ import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import './text_parser.dart';
+
+typedef StringCallback = void Function(String value);
+
 class ExpandableText extends StatefulWidget {
   const ExpandableText(
     this.text, {
@@ -19,6 +23,12 @@ class ExpandableText extends StatefulWidget {
     this.prefixText,
     this.prefixStyle,
     this.onPrefixTap,
+    this.urlStyle,
+    this.onUrlTap,
+    this.hashtagStyle,
+    this.onHashtagTap,
+    this.mentionStyle,
+    this.onMentionTap,
     this.expandOnTextTap = false,
     this.collapseOnTextTap = false,
     this.style,
@@ -44,6 +54,12 @@ class ExpandableText extends StatefulWidget {
   final String? prefixText;
   final TextStyle? prefixStyle;
   final VoidCallback? onPrefixTap;
+  final TextStyle? urlStyle;
+  final StringCallback? onUrlTap;
+  final TextStyle? hashtagStyle;
+  final StringCallback? onHashtagTap;
+  final TextStyle? mentionStyle;
+  final StringCallback? onMentionTap;
   final bool expandOnTextTap;
   final bool collapseOnTextTap;
   final TextStyle? style;
@@ -66,6 +82,9 @@ class ExpandableTextState extends State<ExpandableText>
   late TapGestureRecognizer _linkTapGestureRecognizer;
   late TapGestureRecognizer _prefixTapGestureRecognizer;
 
+  List<TextSegment> _textSegments = [];
+  final List<TapGestureRecognizer> _textSegmentsTapGestureRecognizers = [];
+
   @override
   void initState() {
     super.initState();
@@ -73,12 +92,28 @@ class ExpandableTextState extends State<ExpandableText>
     _expanded = widget.expanded;
     _linkTapGestureRecognizer = TapGestureRecognizer()..onTap = _toggleExpanded;
     _prefixTapGestureRecognizer = TapGestureRecognizer()..onTap = _prefixTapped;
+
+    _updateText();
+  }
+
+  @override
+  void didUpdateWidget(ExpandableText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.text != widget.text ||
+        oldWidget.onUrlTap != widget.onUrlTap ||
+        oldWidget.onHashtagTap != widget.onHashtagTap ||
+        oldWidget.onMentionTap != widget.onMentionTap) {
+      _updateText();
+    }
   }
 
   @override
   void dispose() {
     _linkTapGestureRecognizer.dispose();
     _prefixTapGestureRecognizer.dispose();
+    _textSegmentsTapGestureRecognizers
+        .forEach((recognizer) => recognizer.dispose());
     super.dispose();
   }
 
@@ -147,14 +182,14 @@ class ExpandableTextState extends State<ExpandableText>
       recognizer: _prefixTapGestureRecognizer,
     );
 
-    final text = TextSpan(
-      children: <TextSpan>[
-        prefix,
-        TextSpan(
-          text: widget.text,
-          style: effectiveTextStyle,
-        ),
-      ],
+    final text = _textSegments.isNotEmpty
+        ? TextSpan(
+            children: _buildTextSpans(_textSegments, effectiveTextStyle, null))
+        : TextSpan(text: widget.text);
+
+    final content = TextSpan(
+      children: <TextSpan>[prefix, text],
+      style: effectiveTextStyle,
     );
 
     Widget result = LayoutBuilder(
@@ -181,7 +216,7 @@ class ExpandableTextState extends State<ExpandableText>
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final linkSize = textPainter.size;
 
-        textPainter.text = text;
+        textPainter.text = content;
         textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
         final textSize = textPainter.size;
 
@@ -195,25 +230,38 @@ class ExpandableTextState extends State<ExpandableText>
               (textPainter.getOffsetBefore(position.offset) ?? 0) -
                   prefixText.length;
 
+          final recognizer =
+              (_expanded ? widget.collapseOnTextTap : widget.expandOnTextTap)
+                  ? _linkTapGestureRecognizer
+                  : null;
+
+          final text = _textSegments.isNotEmpty
+              ? TextSpan(
+                  children: _buildTextSpans(
+                      _expanded
+                          ? _textSegments
+                          : parseText(
+                              widget.text.substring(0, max(endOffset, 0))),
+                      effectiveTextStyle!,
+                      recognizer),
+                )
+              : TextSpan(
+                  text: _expanded
+                      ? widget.text
+                      : widget.text.substring(0, max(endOffset, 0)),
+                  recognizer: recognizer,
+                );
+
           textSpan = TextSpan(
             style: effectiveTextStyle,
             children: <TextSpan>[
               prefix,
-              TextSpan(
-                text: _expanded
-                    ? widget.text
-                    : widget.text.substring(0, max(endOffset, 0)),
-                recognizer: (_expanded
-                        ? widget.collapseOnTextTap
-                        : widget.expandOnTextTap)
-                    ? _linkTapGestureRecognizer
-                    : null,
-              ),
+              text,
               link,
             ],
           );
         } else {
-          textSpan = text;
+          textSpan = content;
         }
 
         final richText = RichText(
@@ -250,5 +298,77 @@ class ExpandableTextState extends State<ExpandableText>
     }
 
     return result;
+  }
+
+  void _updateText() {
+    _textSegmentsTapGestureRecognizers
+        .forEach((recognizer) => recognizer.dispose());
+    _textSegmentsTapGestureRecognizers.clear();
+
+    if (widget.onUrlTap == null &&
+        widget.onHashtagTap == null &&
+        widget.onMentionTap == null) {
+      _textSegments.clear();
+      return;
+    }
+
+    _textSegments = parseText(widget.text);
+
+    _textSegments.forEach((element) {
+      if (element.isUrl && widget.onUrlTap != null) {
+        final recognizer = TapGestureRecognizer()
+          ..onTap = () {
+            widget.onUrlTap!(element.name!);
+          };
+
+        _textSegmentsTapGestureRecognizers.add(recognizer);
+      } else if (element.isHashtag && widget.onHashtagTap != null) {
+        final recognizer = TapGestureRecognizer()
+          ..onTap = () {
+            widget.onHashtagTap!(element.name!);
+          };
+
+        _textSegmentsTapGestureRecognizers.add(recognizer);
+      } else if (element.isMention && widget.onMentionTap != null) {
+        final recognizer = TapGestureRecognizer()
+          ..onTap = () {
+            widget.onMentionTap!(element.name!);
+          };
+
+        _textSegmentsTapGestureRecognizers.add(recognizer);
+      }
+    });
+  }
+
+  List<TextSpan> _buildTextSpans(List<TextSegment> segments,
+      TextStyle textStyle, TapGestureRecognizer? textTapRecognizer) {
+    final spans = <TextSpan>[];
+
+    var index = 0;
+    for (var segment in segments) {
+      TextStyle? style;
+      TapGestureRecognizer? recognizer;
+
+      if (segment.isUrl && widget.onUrlTap != null) {
+        style = textStyle.merge(widget.urlStyle);
+        recognizer = _textSegmentsTapGestureRecognizers[index++];
+      } else if (segment.isMention && widget.onMentionTap != null) {
+        style = textStyle.merge(widget.mentionStyle);
+        recognizer = _textSegmentsTapGestureRecognizers[index++];
+      } else if (segment.isHashtag && widget.onHashtagTap != null) {
+        style = textStyle.merge(widget.hashtagStyle);
+        recognizer = _textSegmentsTapGestureRecognizers[index++];
+      }
+
+      final span = TextSpan(
+        text: segment.text,
+        style: style,
+        recognizer: recognizer ?? textTapRecognizer,
+      );
+
+      spans.add(span);
+    }
+
+    return spans;
   }
 }

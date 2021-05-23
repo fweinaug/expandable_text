@@ -215,4 +215,37 @@ void main() {
 
     expect(findTextSpanWithTapGestureRecognizerAndStartingWith(TEXT), findsOneWidget);
   });
+
+  testWidgets('Hashtag in the text is tappable if enabled', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('Text with a #hashtag', expandText: 'more', expanded: true, onHashtagTap: (_) => {})),
+    );
+
+    expect(findTextSpanWithTapGestureRecognizerAndStartingWith('#hashtag'), findsOneWidget);
+  });
+
+  testWidgets('Mention in the text is tappable if enabled', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('Text with a @mention', expandText: 'more', expanded: true, onMentionTap: (_) => {})),
+    );
+
+    expect(findTextSpanWithTapGestureRecognizerAndStartingWith('@mention'), findsOneWidget);
+  });
+
+  testWidgets('Link in the text is tappable if enabled', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('Text with a link https://flutter.dev', expandText: 'more', expanded: true, onUrlTap: (_) => {})),
+    );
+
+    expect(findTextSpanWithTapGestureRecognizerAndStartingWith('https://flutter.dev'), findsOneWidget);
+  });
 }
