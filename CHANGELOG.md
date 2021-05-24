@@ -1,6 +1,12 @@
-## 2.1.0
+## 2.2.0
 
-- Expand and collapse animation (`animation`, `animationDuration`)
+- Text with tappable and styled links (`onUrlTap`, `urlStyle`)
+- Text with tappable and styled @mentions (`onMentionTap`, `mentionStyle`)
+- Text with tappable and styled #hashtags (`onHashtagTap`, `hashtagStyle`)
+
+## 2.1.0+1
+
+- Expand and collapse animation (`animation`, `animationDuration`, `animationCurve`)
 - Tap on the text to expand or collapse the text (`expandOnTextTap`, `collapseOnTextTap`)
 
 ## 2.0.0
