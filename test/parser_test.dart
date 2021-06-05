@@ -50,19 +50,31 @@ void main() {
     ]);
   });
 
-  test('Parse url', () {
-    final segments = parseText('https://flutter.dev');
+  test('Parse urls', () {
+    final segments = parseText('https://flutter.dev flutter.dev http://flutter.dev/docs/get-started flutter.dev/docs/get-started en.wikipedia.org/wiki/Flutter_(software) amazon.co.uk amazon.co.uk/s?k=flutter');
 
     expect(segments, [
       TextSegment('https://flutter.dev', 'https://flutter.dev', false, false, true),
+      TextSegment(' '),
+      TextSegment('flutter.dev', 'flutter.dev', false, false, true),
+      TextSegment(' '),
+      TextSegment('http://flutter.dev/docs/get-started', 'http://flutter.dev/docs/get-started', false, false, true),
+      TextSegment(' '),
+      TextSegment('flutter.dev/docs/get-started', 'flutter.dev/docs/get-started', false, false, true),
+      TextSegment(' '),
+      TextSegment('en.wikipedia.org/wiki/Flutter_(software)', 'en.wikipedia.org/wiki/Flutter_(software)', false, false, true),
+      TextSegment(' '),
+      TextSegment('amazon.co.uk', 'amazon.co.uk', false, false, true),
+      TextSegment(' '),
+      TextSegment('amazon.co.uk/s?k=flutter', 'amazon.co.uk/s?k=flutter', false, false, true),
     ]);
   });
 
   test('Parse text with a url', () {
-    final segments = parseText('text with url https://flutter.dev');
+    final segments = parseText('text with url... https://flutter.dev');
 
     expect(segments, [
-      TextSegment('text with url '),
+      TextSegment('text with url... '),
       TextSegment('https://flutter.dev', 'https://flutter.dev', false, false, true),
     ]);
   });
