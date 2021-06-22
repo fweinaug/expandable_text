@@ -59,12 +59,19 @@ void main() {
     ]);
   });
 
-  test('Parse simple url', () {
+  test('Parse wrong simple url', () {
     final segments = parseText('simple url facebook.com');
 
     expect(segments, [
-      TextSegment('simple url '),
-      TextSegment('facebook.com', 'facebook.com', false, false, true),
+      TextSegment('simple url facebook.com'),
+    ]);
+  });
+
+  test('Parse strange text', () {
+    final segments = parseText('test.test.cdcd...cddc');
+
+    expect(segments, [
+      TextSegment('test.test.cdcd...cddc'),
     ]);
   });
 
