@@ -69,8 +69,8 @@ List<TextSegment> parseText(String? text) {
     if (url != null) {
       segments.add(TextSegment(url, url, false, false, true));
     } else if (keyword != null) {
-      final isWord =
-          match.start == 0 || text.substring(match.start - 1, start) == ' ';
+      final isWord = match.start == 0 ||
+          [' ', '\n'].contains(text.substring(match.start - 1, start));
       if (!isWord) {
         return;
       }

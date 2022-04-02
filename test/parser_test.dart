@@ -101,4 +101,18 @@ void main() {
       TextSegment('men@tion hash#tag'),
     ]);
   });
+
+  test('Parse mentions and hashtags that start on a new line', () {
+    final segments = parseText('@men\n@tion\n#hash\n#tag');
+
+    expect(segments, [
+      TextSegment('@men', 'men', false, true, false),
+      TextSegment('\n'),
+      TextSegment('@tion', 'tion', false, true, false),
+      TextSegment('\n'),
+      TextSegment('#hash', 'hash', true, false, false),
+      TextSegment('\n'),
+      TextSegment('#tag', 'tag', true, false, false),
+    ]);
+  });
 }
