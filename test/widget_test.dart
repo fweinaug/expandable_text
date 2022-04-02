@@ -339,4 +339,19 @@ void main() {
     expect(called, true);
     expect(url, 'https://flutter.dev');
   });
+
+  testWidgets('Tap on link calls onLinkTap', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    var called = false;
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', collapseText: 'less', expanded: false, onLinkTap: () => called = true)),
+    );
+
+    await tester.tap(findTextSpanByText('more'));
+
+    expect(called, true);
+  });
 }

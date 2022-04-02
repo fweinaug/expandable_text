@@ -17,6 +17,7 @@ class ExpandableText extends StatefulWidget {
     this.collapseText,
     this.expanded = false,
     this.onExpandedChanged,
+    this.onLinkTap,
     this.linkColor,
     this.linkEllipsis = true,
     this.linkStyle,
@@ -48,6 +49,7 @@ class ExpandableText extends StatefulWidget {
   final String? collapseText;
   final bool expanded;
   final ValueChanged<bool>? onExpandedChanged;
+  final VoidCallback? onLinkTap;
   final Color? linkColor;
   final bool linkEllipsis;
   final TextStyle? linkStyle;
@@ -90,7 +92,7 @@ class ExpandableTextState extends State<ExpandableText>
     super.initState();
 
     _expanded = widget.expanded;
-    _linkTapGestureRecognizer = TapGestureRecognizer()..onTap = _toggleExpanded;
+    _linkTapGestureRecognizer = TapGestureRecognizer()..onTap = _linkTapped;
     _prefixTapGestureRecognizer = TapGestureRecognizer()..onTap = _prefixTapped;
 
     _updateText();
@@ -117,7 +119,12 @@ class ExpandableTextState extends State<ExpandableText>
     super.dispose();
   }
 
-  void _toggleExpanded() {
+  void _linkTapped() {
+    if (widget.onLinkTap != null) {
+      widget.onLinkTap!();
+      return;
+    }
+
     final toggledExpanded = !_expanded;
 
     setState(() => _expanded = toggledExpanded);
