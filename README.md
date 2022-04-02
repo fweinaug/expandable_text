@@ -4,7 +4,7 @@
 
 This Flutter package includes the widget `ExpandableText` which you can use to initially only show a
 defined number of lines of a probably long text. The widget appends a configurable text link which
-let's the user expand the full text, or collapse it again.
+lets the user expand the full text, or collapse it again.
 
 ![Example with maxLines=1](https://user-images.githubusercontent.com/17765766/118534275-531f7c00-b749-11eb-90e9-e6eb36808eec.gif)
 
@@ -45,7 +45,7 @@ This example shows a `message` that was posted by a user.
 The `username` is always visible right before the text and tapping on it opens the user profile.
 The text is truncated after two lines and can be expanded by tapping on the link *show more* at the end or the text itself.
 After the text was expanded it cannot be collapsed again as no `collapseText` was provided.
-Links, @mentions and #hashtags in the text are styled differently and can be tapped to open the browser or the user profile.
+URLs, @mentions and #hashtags in the text are styled differently and can be tapped to open the browser or the user profile.
 
 ```dart
 Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ Widget build(BuildContext context) {
 - Text with tappable and styled @mentions (`onMentionTap`, `mentionStyle`)
 - Text with tappable and styled #hashtags (`onHashtagTap`, `hashtagStyle`)
 - Configure the number of visible lines of the collapsed text (`maxLines`)
-- Control the default expanded state (`expanded`)
+- Control the default expanded state (`expanded`, `onLinkTap`)
 - Callback for expanded changed event (`onExpandedChanged`)
 - Tap on the text to expand or collapse the text (`expandOnTextTap`, `collapseOnTextTap`)
 
@@ -98,5 +98,5 @@ If your problem or idea is not addressed yet, [please open a new issue](https://
 
 ## Copyright & License
 
-Code copyright 2020–2021 Florian Weinaug.
+Code copyright 2020–2022 Florian Weinaug.
 Code released under the [MIT license](https://github.com/fweinaug/expandable_text/blob/master/LICENSE).
