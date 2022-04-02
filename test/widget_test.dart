@@ -248,4 +248,95 @@ void main() {
 
     expect(findTextSpanWithTapGestureRecognizerAndStartingWith('https://flutter.dev'), findsOneWidget);
   });
+
+  testWidgets('Tap on link expands the widget', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', collapseText: 'less', expanded: false)),
+    );
+
+    expect(findTextSpanByText('more'), findsOneWidget);
+
+    await tester.tap(findTextSpanByText('more'));
+    await tester.pumpAndSettle();
+
+    expect(findTextSpanByText('less'), findsOneWidget);
+  });
+
+  testWidgets('Tap on link calls onExpandedChanged', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    var expanded = false;
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', collapseText: 'less', expanded: false, onExpandedChanged: (value) => expanded = value)),
+    );
+
+    await tester.tap(findTextSpanByText('more'));
+
+    expect(expanded, true);
+  });
+
+  testWidgets('Tap on hashtag calls onHashtagTap', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(LARGE_SCREEN);
+
+    var called = false;
+    var hashtag = '';
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('#test', expandText: 'more', collapseText: 'less', expanded: false, onHashtagTap: (value) {
+        called = true;
+        hashtag = value;
+      })),
+    );
+
+    await tester.tap(findTextSpanByText('#test'));
+
+    expect(called, true);
+    expect(hashtag, 'test');
+  });
+
+  testWidgets('Tap on mention calls onMentionTap', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(LARGE_SCREEN);
+
+    var called = false;
+    var mention = '';
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('@test', expandText: 'more', collapseText: 'less', expanded: false, onMentionTap: (value) {
+        called = true;
+        mention = value;
+      })),
+    );
+
+    await tester.tap(findTextSpanByText('@test'));
+
+    expect(called, true);
+    expect(mention, 'test');
+  });
+
+  testWidgets('Tap on url calls onUrlTap', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(LARGE_SCREEN);
+
+    var called = false;
+    var url = '';
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('https://flutter.dev', expandText: 'more', collapseText: 'less', expanded: false, onUrlTap: (value) {
+        called = true;
+        url = value;
+      })),
+    );
+
+    await tester.tap(findTextSpanByText('https://flutter.dev'));
+
+    expect(called, true);
+    expect(url, 'https://flutter.dev');
+  });
 }
