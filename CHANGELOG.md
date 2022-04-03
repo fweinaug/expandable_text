@@ -1,3 +1,9 @@
+## 2.3.0
+
+- New callback to handle link taps (`onLinkTap`)
+- Improved URL parsing
+- Fix unrecognized keywords starting on new line
+
 ## 2.2.0
 
 - Text with tappable and styled links (`onUrlTap`, `urlStyle`)
