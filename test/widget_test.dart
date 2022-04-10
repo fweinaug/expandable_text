@@ -257,8 +257,6 @@ void main() {
       MaterialApp(home: ExpandableText(TEXT, expandText: 'more', collapseText: 'less', expanded: false)),
     );
 
-    expect(findTextSpanByText('more'), findsOneWidget);
-
     await tester.tap(findTextSpanByText('more'));
     await tester.pumpAndSettle();
 
@@ -338,6 +336,21 @@ void main() {
 
     expect(called, true);
     expect(url, 'https://flutter.dev');
+  });
+
+  testWidgets('Tap on prefix calls onPrefixTap', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(LARGE_SCREEN);
+
+    var called = false;
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('', prefixText: 'prefix', expandText: 'more', onPrefixTap: () => called = true)),
+    );
+
+    await tester.tap(findTextSpanByText('prefix'));
+
+    expect(called, true);
   });
 
   testWidgets('Tap on link calls onLinkTap', (WidgetTester tester) async {
