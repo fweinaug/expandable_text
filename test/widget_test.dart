@@ -15,10 +15,22 @@ void main() {
     await binding.setSurfaceSize(SMALL_SCREEN);
 
     await tester.pumpWidget(
-      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', collapseText: 'less', expanded: false)),
+      MaterialApp(home: ExpandableText(TEXT, expandText: 'more', expanded: false)),
     );
 
     expect(findTextSpan((span) => span.text == TEXT), findsNothing);
+    expect(findTextSpanByText('\u2026'), findsOneWidget);
+  });
+
+  testWidgets('Collapsed widget shows truncated segment with ellipsis', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+    await binding.setSurfaceSize(SMALL_SCREEN);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ExpandableText('@verylongmention', expandText: 'more', expanded: false, onMentionTap: (value) => {})),
+    );
+
+    expect(findTextSpan((span) => span.text == '@verylongmention'), findsNothing);
     expect(findTextSpanByText('\u2026'), findsOneWidget);
   });
 
