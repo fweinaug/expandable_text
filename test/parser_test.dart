@@ -115,4 +115,19 @@ void main() {
       TextSegment('#tag', 'tag', true, false, false),
     ]);
   });
+
+  test('Equality operator', () {
+    final segment1 = TextSegment('Text', 'Name', true, true, true);
+    final segment2 = TextSegment('Text', 'Name', true, true, true);
+
+    expect(segment1 == segment2, true);
+  });
+
+  test('HashCode property', () {
+    final segment1 = TextSegment('Text', 'Name', true, true, true);
+    final segment2 = TextSegment('Text', 'Name', true, true, true);
+
+    expect(segment1.hashCode > 0, true);
+    expect(segment1.hashCode == segment2.hashCode, true);
+  });
 }
