@@ -1,5 +1,6 @@
 ![Build](https://github.com/fweinaug/expandable_text/workflows/Build/badge.svg)
 [![pub package](https://img.shields.io/pub/v/expandable_text.svg)](https://pub.dev/packages/expandable_text)
+[![codecov](https://codecov.io/gh/fweinaug/expandable_text/branch/master/graph/badge.svg?token=OU6GQ6YSQL)](https://codecov.io/gh/fweinaug/expandable_text)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/fweinaug/expandable_text/blob/master/LICENSE)
 
 This Flutter package includes the widget `ExpandableText` which you can use to initially only show a
