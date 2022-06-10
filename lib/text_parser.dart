@@ -5,7 +5,6 @@ class TextSegment {
   final bool isHashtag;
   final bool isMention;
   final bool isUrl;
-  final bool withSpace;
 
   bool get isText => !isHashtag && !isMention && !isUrl;
 
@@ -13,7 +12,7 @@ class TextSegment {
       [this.name,
       this.isHashtag = false,
       this.isMention = false,
-      this.isUrl = false, this.withSpace = false]);
+      this.isUrl = false,]);
 
   @override
   bool operator ==(Object other) =>
@@ -47,8 +46,11 @@ List<TextSegment> parseText(String? text, bool withSpace) {
   }
 
   // parse urls and words starting with @ (mention) or # (hashtag)
-  RegExp exp = RegExp(
+  RegExp exp = withSpace ?RegExp(
       r'(?<keyword>(#|@)([\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]+)(?:\s[\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]+)|(?<url>(?:(?:https?|ftp):\/\/)?[-a-z0-9@:%._\+~#=]{1,256}\.[a-z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?))',
+      unicode: true)
+      :RegExp(
+      r'(?<keyword>(#|@)([\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]+)|(?<url>(?:(?:https?|ftp):\/\/)?[-a-z0-9@:%._\+~#=]{1,256}\.[a-z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?))',
       unicode: true);
   final matches = exp.allMatches(text);
 
