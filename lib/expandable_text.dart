@@ -250,7 +250,7 @@ class ExpandableTextState extends State<ExpandableText>
                       _expanded
                           ? _textSegments
                           : parseText(
-                              widget.text.substring(0, max(endOffset, 0),widget.withSpace)),
+                              widget.text.substring(0, max(endOffset, 0)),  widget.withSpace ?? false),
                       effectiveTextStyle!,
                       recognizer),
                 )
@@ -320,7 +320,7 @@ class ExpandableTextState extends State<ExpandableText>
       return;
     }
 
-    _textSegments = parseText(widget.text, widget.withSpace);
+    _textSegments = parseText(widget.text, widget.withSpace ?? false);
 
     _textSegments.forEach((element) {
       if (element.isUrl && widget.onUrlTap != null) {
