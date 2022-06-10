@@ -12,7 +12,7 @@ class TextSegment {
       [this.name,
       this.isHashtag = false,
       this.isMention = false,
-      this.isUrl = false]);
+      this.isUrl = false,]);
 
   @override
   bool operator ==(Object other) =>
@@ -38,7 +38,7 @@ class TextSegment {
 ///
 /// Mentions are all words that start with @, e.g. @mention.
 /// Hashtags are all words that start with #, e.g. #hashtag.
-List<TextSegment> parseText(String? text) {
+List<TextSegment> parseText(String? text, bool withSpace) {
   final segments = <TextSegment>[];
 
   if (text == null || text.isEmpty) {
@@ -46,12 +46,16 @@ List<TextSegment> parseText(String? text) {
   }
 
   // parse urls and words starting with @ (mention) or # (hashtag)
-  RegExp exp = RegExp(
+  RegExp exp = withSpace ?RegExp(
+      r'(?<keyword>(#|@)([\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]+)(?:\s[\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]+)|(?<url>(?:(?:https?|ftp):\/\/)?[-a-z0-9@:%._\+~#=]{1,256}\.[a-z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?))',
+      unicode: true)
+      :RegExp(
       r'(?<keyword>(#|@)([\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]+)|(?<url>(?:(?:https?|ftp):\/\/)?[-a-z0-9@:%._\+~#=]{1,256}\.[a-z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?))',
       unicode: true);
   final matches = exp.allMatches(text);
 
   var start = 0;
+  String previousKeyword = "";
   matches.forEach((match) {
     // text before the keyword
     if (match.start > start) {
@@ -65,6 +69,7 @@ List<TextSegment> parseText(String? text) {
 
     final url = match.namedGroup('url');
     final keyword = match.namedGroup('keyword');
+    previousKeyword = keyword ?? "";
 
     if (url != null) {
       segments.add(TextSegment(url, url, false, false, true));
@@ -76,7 +81,8 @@ List<TextSegment> parseText(String? text) {
       }
 
       final isHashtag = keyword.startsWith('#');
-      final isMention = keyword.startsWith('@');
+      final isMention = keyword.startsWith('@') || previousKeyword.startsWith('@');
+      
 
       segments.add(
           TextSegment(keyword, keyword.substring(1), isHashtag, isMention));
