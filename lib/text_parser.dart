@@ -5,6 +5,7 @@ class TextSegment {
   final bool isHashtag;
   final bool isMention;
   final bool isUrl;
+  final bool withSpace;
 
   bool get isText => !isHashtag && !isMention && !isUrl;
 
@@ -12,7 +13,7 @@ class TextSegment {
       [this.name,
       this.isHashtag = false,
       this.isMention = false,
-      this.isUrl = false]);
+      this.isUrl = false, this.withSpace = false]);
 
   @override
   bool operator ==(Object other) =>
@@ -38,7 +39,7 @@ class TextSegment {
 ///
 /// Mentions are all words that start with @, e.g. @mention.
 /// Hashtags are all words that start with #, e.g. #hashtag.
-List<TextSegment> parseText(String? text) {
+List<TextSegment> parseText(String? text, bool withSpace) {
   final segments = <TextSegment>[];
 
   if (text == null || text.isEmpty) {
@@ -52,6 +53,7 @@ List<TextSegment> parseText(String? text) {
   final matches = exp.allMatches(text);
 
   var start = 0;
+  String previousKeyword = "";
   matches.forEach((match) {
     // text before the keyword
     if (match.start > start) {
@@ -65,6 +67,7 @@ List<TextSegment> parseText(String? text) {
 
     final url = match.namedGroup('url');
     final keyword = match.namedGroup('keyword');
+    previousKeyword = keyword ?? "";
 
     if (url != null) {
       segments.add(TextSegment(url, url, false, false, true));
@@ -76,7 +79,8 @@ List<TextSegment> parseText(String? text) {
       }
 
       final isHashtag = keyword.startsWith('#');
-      final isMention = keyword.startsWith('@');
+      final isMention = keyword.startsWith('@') || previousKeyword.startsWith('@');
+      
 
       segments.add(
           TextSegment(keyword, keyword.substring(1), isHashtag, isMention));
