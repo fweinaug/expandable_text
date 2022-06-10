@@ -41,7 +41,7 @@ class ExpandableText extends StatefulWidget {
     this.animationDuration,
     this.animationCurve,
     this.semanticsLabel,
-    this.withSpace
+    this.mentionsWithSpace
   })  : assert(maxLines > 0),
         super(key: key);
 
@@ -74,7 +74,7 @@ class ExpandableText extends StatefulWidget {
   final Duration? animationDuration;
   final Curve? animationCurve;
   final String? semanticsLabel;
-  final bool? withSpace;
+  final bool? mentionsWithSpace;
 
   @override
   ExpandableTextState createState() => ExpandableTextState();
@@ -250,7 +250,7 @@ class ExpandableTextState extends State<ExpandableText>
                       _expanded
                           ? _textSegments
                           : parseText(
-                              widget.text.substring(0, max(endOffset, 0)),  widget.withSpace ?? false),
+                              widget.text.substring(0, max(endOffset, 0)),  widget.mentionsWithSpace ?? false),
                       effectiveTextStyle!,
                       recognizer),
                 )
@@ -320,7 +320,7 @@ class ExpandableTextState extends State<ExpandableText>
       return;
     }
 
-    _textSegments = parseText(widget.text, widget.withSpace ?? false);
+    _textSegments = parseText(widget.text, widget.mentionsWithSpace ?? false);
 
     _textSegments.forEach((element) {
       if (element.isUrl && widget.onUrlTap != null) {
